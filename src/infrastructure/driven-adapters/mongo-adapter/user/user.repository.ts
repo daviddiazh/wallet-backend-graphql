@@ -47,7 +47,7 @@ export class UserDBRepository implements IUserDBRepository {
     */
    async findById (id: string): Promise<User> {
         try {
-            const user = await this.userModel.findOne({id}).populate('businessId');
+            const user = await this.userModel.findOne({id});
 
             if ( !user ) {
                 throw new NotFoundException('Not found user by id - Repository (USER MODULE)');
@@ -71,7 +71,7 @@ export class UserDBRepository implements IUserDBRepository {
     */
     async findByName (name: string, lastName: string): Promise<User[]> {
         try {
-            const users: any = await this.userModel.find({name, lastName}).populate('businessId');
+            const users: any = await this.userModel.find({name, lastName});
 
             if ( !users ) {
                 throw new NotFoundException('Not found user by name - Repository (USER MODULE)');
@@ -98,7 +98,7 @@ export class UserDBRepository implements IUserDBRepository {
     */
     async findByEmail (email: string): Promise<User> {
         try {
-            const user: User = await this.userModel.findOne({email}).populate('businessId');
+            const user: User = await this.userModel.findOne({email});
 
             if ( !user ) {
                 throw new NotFoundException('Not found user by email - Repository (USER MODULE)');
@@ -117,7 +117,7 @@ export class UserDBRepository implements IUserDBRepository {
     */
     async findAll (): Promise<User[]> {
         try {
-            const users: any = await this.userModel.find().populate('businessId');
+            const users: any = await this.userModel.find().exec();
 
             if ( !users ) {
                 throw new Error('Not found users - Repository (USER MODULE)');

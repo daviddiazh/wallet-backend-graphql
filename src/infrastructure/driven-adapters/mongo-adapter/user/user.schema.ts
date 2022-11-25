@@ -47,26 +47,18 @@ export class UserSpec extends Document implements IUser {
 
    @Prop({
         type: Number,
-        required: true,
+        required: false,
         trim: true,
     })
-    clientState: number;
+    clientState?: number;
 
    @Prop({
         type: String,
         trim: true,
         required: false,
-        default: '' //TODO: Change it and search an image
+        default: 'https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png'
    })
    profilePicture?: string;
-
-//    @Prop({
-//         type: SchemaMongoose.Types.ObjectId,
-//         require: true,
-//         trim: true,
-//         ref: 'Business',
-//    })
-//    businessId: SchemaMongoose.Types.ObjectId;
 
 }
 

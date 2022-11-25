@@ -1,4 +1,4 @@
-# Backend Application (SAAS) with Clean Architecture
+# Backend Application (Wallet) with Clean Architecture
 
 ## Stack usado
 - NestJS
@@ -15,7 +15,7 @@ docker-compose up -d
 
 * La URL de MongoDB Local: 
 ```
-mongodb://localhost:27017/projects_management
+mongodb://localhost:27017/wallet
 ```
 
 * Para reconstruir los modulos de node y levantar el servidor de node con nestjs es necesario tener instalado *yarn* y luego ejecutar este comando:

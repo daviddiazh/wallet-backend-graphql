@@ -7,6 +7,5 @@ export class User implements IUser{
     phone?: string;
     email: string;
     password?: string;
-    clientState: number;
-    // businessId: Schema.Types.ObjectId;
+    clientState?: number;
 }

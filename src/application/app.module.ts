@@ -5,6 +5,7 @@ import { DatabaseModule } from '../infrastructure/driven-adapters/mongo-adapter/
 import { UserModule } from '../infrastructure/entry-points/auth/user.module';
 import { ConfigModule } from '@nestjs/config';
 import config from './config';
+import { AccountModule } from '../infrastructure/entry-points/account/account.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import config from './config';
     DatabaseModule,
     UserModule,
     UserModule,
-    
+    AccountModule,
+
     ConfigModule.forRoot({
       envFilePath: '.env',
       load: [config],

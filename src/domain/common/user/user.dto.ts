@@ -28,7 +28,4 @@ export class UserDto implements IUser {
     @IsOptional()
     profilePicture?: string;
 
-    // @IsMongoId()
-    // businessId: Schema.Types.ObjectId
-
 }

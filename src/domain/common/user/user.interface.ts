@@ -4,9 +4,8 @@ export interface IUser {
     _id?: Schema.Types.ObjectId;
     fullName: string;
     email: string;
-    phone?: string;
+    phone?: string; 
     profilePicture?: string;
     password?: string;
     clientState?: number;
-    // businessId: Schema.Types.ObjectId
 }

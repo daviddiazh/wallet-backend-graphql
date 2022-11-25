@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as SchemaMongoose } from 'mongoose';
 import { IUser } from '../../../../domain/common/user/user.interface';
-import { Role } from '../../../../domain/common/user/user-role.enum';
 
 @Schema({
     toJSON: {
@@ -22,14 +21,7 @@ export class UserSpec extends Document implements IUser {
         required: true,
         trim: true,
     })
-    name: string;
-
-   @Prop({
-        type: String,
-        required: true,
-        trim: true,
-    })
-   lastName: string;
+    fullName: string;
    
    @Prop({
         type: Number,
@@ -54,15 +46,11 @@ export class UserSpec extends Document implements IUser {
    password: string;
 
    @Prop({
-        type: String,
+        type: Number,
         required: true,
         trim: true,
-        enum: {
-            values: [ 'USER', 'CLIENT', 'EMPLOYEE', 'ADMIN', ],
-            default: 'USER',
-        },
     })
-   role: Role;
+    clientState: number;
 
    @Prop({
         type: String,
@@ -72,13 +60,13 @@ export class UserSpec extends Document implements IUser {
    })
    profilePicture?: string;
 
-   @Prop({
-        type: SchemaMongoose.Types.ObjectId,
-        require: true,
-        trim: true,
-        ref: 'Business',
-   })
-   businessId: SchemaMongoose.Types.ObjectId;
+//    @Prop({
+//         type: SchemaMongoose.Types.ObjectId,
+//         require: true,
+//         trim: true,
+//         ref: 'Business',
+//    })
+//    businessId: SchemaMongoose.Types.ObjectId;
 
 }
 

@@ -2,7 +2,6 @@ import { Injectable, UnauthorizedException, InternalServerErrorException } from 
 import { UserDBRepository } from '../../driven-adapters/mongo-adapter/user/user.repository';
 import { LoginDto, signUpDto } from './dto/auth-dto';
 import { HashService } from '../../driven-adapters/hash-password-adapter/hash-password.service';
-// import { JwtService } from 'src/infrastructure/driven-adapters/jwt-adapter/jwt.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -12,7 +11,6 @@ export class AuthService {
         private readonly auth: UserDBRepository,
         private readonly hashService: HashService,
         private readonly jwtService: JwtService
-        // private readonly jwtService: JwtService
     ){}
 
     async signUp (payload: signUpDto): Promise<object | any> { //TODO: Change method name

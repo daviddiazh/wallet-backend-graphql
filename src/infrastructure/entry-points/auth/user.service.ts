@@ -8,7 +8,7 @@ import { CreateUserDto } from './dto/user.dto';
 export class UserService implements IUserDBRepository {
 
     constructor(
-        private readonly user: UserDBRepository
+        private readonly user: UserDBRepository,
     ){}
 
     create(payload: CreateUserDto): Promise<User> {

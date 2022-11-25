@@ -1,17 +1,12 @@
 import { Schema } from 'mongoose';
 import { IUser } from './user.interface';
-import { Role } from './user-role.enum';
-import { IsString, IsMongoId, IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsMongoId, IsEmail, IsNotEmpty, IsOptional, IsNumber } from 'class-validator';
 
 export class UserDto implements IUser {
 
     @IsString()
     @IsNotEmpty()
-    name: string;
-
-    @IsString()
-    @IsNotEmpty()
-    lastName: string;
+    fullName: string;
 
     @IsString()
     @IsOptional()
@@ -25,18 +20,15 @@ export class UserDto implements IUser {
     @IsNotEmpty()
     password: string;
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
-    role: Role;
+    clientState?: number;
 
     @IsString()
     @IsOptional()
     profilePicture?: string;
 
-    @IsMongoId()
-    businessId: Schema.Types.ObjectId
+    // @IsMongoId()
+    // businessId: Schema.Types.ObjectId
 
-    // @IsString()
-    // @IsNotEmpty()
-    // businessName: string
 }

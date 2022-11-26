@@ -64,11 +64,6 @@ export class MovementDBRepository implements IMovementDBRepository {
             const foundMovementOutcome = await this.movementModel.find({ accountId_Outcome: id });
             console.log('foundMovementOutcome: ', foundMovementOutcome);
 
-            // const myMovements = [foundMovementIncome, foundMovementOutcome];
-            // const MyMovementsSorted = myMovements.sort((a: any, b: any) => {
-
-            // })
-
             return {
                 foundMovementIncome,
                 foundMovementOutcome

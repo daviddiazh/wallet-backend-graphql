@@ -68,13 +68,11 @@ export class MovementService {
 
       const movement = await this.movementRepository.create(payloadSave);
 
-      const newBalanceIncome = toUser.balance += amount
-      const savedBalanceIncome = await this.accountRepository.updateBalance(accountId_Income, newBalanceIncome)
-      console.log('newBalanceIncome: ', newBalanceIncome)
+      const newBalanceIncome = toUser.balance += amount;
+      const savedBalanceIncome = await this.accountRepository.updateBalance(accountId_Income, newBalanceIncome);
 
-      const newBalanceOutcome = fromUser.balance -= amount
-      const savedBalanceOutcome = await this.accountRepository.updateBalance(accountId_Income, newBalanceOutcome)
-      console.log('newBalanceOutcome: ', newBalanceOutcome)
+      const newBalanceOutcome = fromUser.balance -= amount;
+      const savedBalanceOutcome = await this.accountRepository.updateBalance(accountId_Outcome, newBalanceOutcome);
 
       return {movement, savedBalanceIncome, savedBalanceOutcome};
     } catch (error) {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { IAccountDBRepository } from './account.repository.types';
 import { AccountDBRepository } from 'src/infrastructure/driven-adapters/mongo-adapter/account/account.repository';
@@ -17,5 +17,20 @@ export class AccountService implements IAccountDBRepository {
   findById(id: string) {
     return this.accountRepository.findById(id);
   }
+
+  // credit(payload: any) {
+  //   try {
+  //     const { accountId, amount, reason } = payload;
+
+  //     if( !accountId ) {
+  //       throw new NotFoundException('Account ID not found, please create a new Account or call to bank.');
+  //     }
+
+
+
+  //   } catch (error) {
+  //     throw new BadRequestException(error, 'Please sure of send a good credit request.')
+  //   }
+  // }
 
 }

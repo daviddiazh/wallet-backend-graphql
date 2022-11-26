@@ -16,7 +16,7 @@ export class AccountDBRepository implements IAccountDBRepository {
     /**
      * Create a new Account
      * @param payload
-     * @return createdAccount - The account created
+     * @return createdAccount
     */
     async create (payload: AccountDto): Promise<Account> {
         try {
@@ -28,9 +28,14 @@ export class AccountDBRepository implements IAccountDBRepository {
         }
     }
 
+    /**
+     * Find an account by id
+     * @param payload
+     * @return found account
+    */
     async findById (id: string): Promise<Account> {
         try {
-            const foundAccount = await this.accountModel.findOne({id}).populate('userId');
+            const foundAccount = await this.accountModel.findById({id}).populate('userId');
 
             return foundAccount;
         } catch (error) {

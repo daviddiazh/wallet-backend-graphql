@@ -35,7 +35,22 @@ export class AccountDBRepository implements IAccountDBRepository {
     */
     async findById (id: string): Promise<Account> {
         try {
-            const foundAccount = await this.accountModel.findById({id}).populate('userId');
+            const foundAccount = await this.accountModel.findById(id);
+
+            return foundAccount;
+        } catch (error) {
+            this.handleExceptions(error);
+        }
+    }
+
+    /**
+     * Find an account by id and update balance
+     * @param accountId, newBalance
+     * @return found account and update balance
+    */
+     async updateBalance (accountId: string, newBalance: any): Promise<Account> {
+        try {
+            const foundAccount = await this.accountModel.findByIdAndUpdate(accountId, {balance: newBalance}, {new: true});
 
             return foundAccount;
         } catch (error) {

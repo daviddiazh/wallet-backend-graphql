@@ -66,15 +66,15 @@ export class UserDBRepository implements IUserDBRepository {
 
    /**
      * Find a User
-     * @body name, lastName
-     * @return user by name found - The user found
+     * @body phone
+     * @return user by phone found - The user found
     */
-    async findByName (name: string, lastName: string): Promise<User[]> {
+    async findByPhone (phone: number): Promise<User> {
         try {
-            const users: any = await this.userModel.find({name, lastName});
+            const users: any = await this.userModel.findOne({phone});
 
             if ( !users ) {
-                throw new NotFoundException('Not found user by name - Repository (USER MODULE)');
+                throw new NotFoundException('Not found user by phone - Repository (USER MODULE)');
             }
 
             let newObjectUsers = users;
@@ -87,7 +87,7 @@ export class UserDBRepository implements IUserDBRepository {
             return returnUsers;
         } catch (error) {
             console.log('Down Service in FindByName method on Repository - ADAPTER');
-            throw new ServiceUnavailableException(`Down Service in findByName method: ${error.message}`);
+            throw new ServiceUnavailableException(`Down Service in findByPhone method: ${error.message}`);
         }
    }
 

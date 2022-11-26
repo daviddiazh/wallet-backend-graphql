@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 export abstract class IUserDBRepository {
     abstract create(payload: UserDto): Promise<User>;
     abstract findById(id: string): Promise<User>;
-    abstract findByName(name: string, lastName: string): Promise<User[] | User>;
+    abstract findByPhone(phone: number): Promise<User>;
     abstract findByEmail(email: string): Promise<User>;
     abstract findAll(): Promise<User[]>;
     abstract updateRole(id: string, role: string): Promise<User>;

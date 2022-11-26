@@ -8,9 +8,9 @@ export class UserDto implements IUser {
     @IsNotEmpty()
     fullName: string;
 
-    @IsString()
+    @IsNumber()
     @IsOptional()
-    phone?: string;
+    phone: number;
 
     @IsEmail()
     @IsNotEmpty()

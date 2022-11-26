@@ -6,6 +6,8 @@ import { UserSchema } from './user/user.schema';
 import { UserDBRepository } from './user/user.repository';
 import { AccountSchema } from './account/account.schema';
 import { AccountDBRepository } from './account/account.repository';
+import { MovementSchema } from './movement/movement.schema';
+import { MovementDBRepository } from './movement/movement.repository';
 
 @Global()
 @Module({
@@ -26,10 +28,14 @@ import { AccountDBRepository } from './account/account.repository';
       {
         name: 'Account',
         schema: AccountSchema
+      },
+      {
+        name: 'Movement',
+        schema: MovementSchema
       }
     ])
   ],
-  providers: [ UserDBRepository, AccountDBRepository ],
-  exports: [ MongooseModule, UserDBRepository, AccountDBRepository ]
+  providers: [ UserDBRepository, AccountDBRepository, MovementDBRepository ],
+  exports: [ MongooseModule, UserDBRepository, AccountDBRepository, MovementDBRepository ]
 })
 export class DatabaseModule {}

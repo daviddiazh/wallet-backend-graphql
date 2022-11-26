@@ -18,13 +18,15 @@ export class MovementSpec extends Document implements IMovement {
    
     @Prop({
         type: SchemaMongoose.Types.ObjectId,
+        // type: String,
         required: true,
         trim: true,
     })
     accountId_Income: SchemaMongoose.Types.ObjectId;
 
     @Prop({
-        type: SchemaMongoose.Types.ObjectId,
+        // type: SchemaMongoose.Types.ObjectId, String,
+        type: String,
         required: true,
         trim: true,
     })
@@ -49,7 +51,7 @@ export class MovementSpec extends Document implements IMovement {
         required: false,
         trim: true,
     })
-    fees: number;
+    fees?: number;
 
 }
 

@@ -6,6 +6,7 @@ import { UserModule } from '../infrastructure/entry-points/auth/user.module';
 import { ConfigModule } from '@nestjs/config';
 import config from './config';
 import { AccountModule } from '../infrastructure/entry-points/account/account.module';
+import { MovementModule } from '../infrastructure/entry-points/movement/movement.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AccountModule } from '../infrastructure/entry-points/account/account.mo
     UserModule,
     UserModule,
     AccountModule,
+    MovementModule,
 
     ConfigModule.forRoot({
       envFilePath: '.env',

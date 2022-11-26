@@ -12,7 +12,7 @@ export class MovementDto implements IMovement {
     accountId_Income: Schema.Types.ObjectId | string;
 
     @IsNotEmpty()
-    accountId_Outcome: string | Schema.Types.ObjectId;
+    accountId_Outcome: Schema.Types.ObjectId | string;
 
     @IsNotEmpty()
     @IsString()

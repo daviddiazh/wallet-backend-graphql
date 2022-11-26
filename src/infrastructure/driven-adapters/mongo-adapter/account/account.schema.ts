@@ -28,7 +28,7 @@ export class AccountSpec extends Document implements IAccount {
         type: Number,
         required: false,
         trim: true,
-        default: 50000000
+        default: 1000000
     })
     balance?: number;
 

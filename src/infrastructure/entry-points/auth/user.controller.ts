@@ -18,10 +18,10 @@ export class UserController implements IUserDBRepository {
     return this.userService.findById(id);
   }
 
-  @Post('/findByName')
-  findByName(@Body() payload: any){
-    const { name, lastName } = payload;
-    return this.userService.findByName(name, lastName);
+  @Post('/findByPhone')
+  findByPhone(@Body() payload: any){
+    const { phone } = payload;
+    return this.userService.findByPhone(phone);
   }
 
   @Post('/findByEmail')

@@ -2,6 +2,7 @@ import { Injectable, BadRequestException, NotFoundException } from '@nestjs/comm
 import { CreateAccountDto } from './dto/create-account.dto';
 import { IAccountDBRepository } from './account.repository.types';
 import { AccountDBRepository } from 'src/infrastructure/driven-adapters/mongo-adapter/account/account.repository';
+import { Account } from './entities/account.entity';
 
 @Injectable()
 export class AccountService implements IAccountDBRepository {
@@ -18,19 +19,8 @@ export class AccountService implements IAccountDBRepository {
     return this.accountRepository.findById(id);
   }
 
-  // credit(payload: any) {
-  //   try {
-  //     const { accountId, amount, reason } = payload;
-
-  //     if( !accountId ) {
-  //       throw new NotFoundException('Account ID not found, please create a new Account or call to bank.');
-  //     }
-
-
-
-  //   } catch (error) {
-  //     throw new BadRequestException(error, 'Please sure of send a good credit request.')
-  //   }
-  // }
+  updateBalance(accountId: string, newBalance: number): Promise<Account> {
+    return this.accountRepository.updateBalance(accountId, newBalance);
+  }
 
 }

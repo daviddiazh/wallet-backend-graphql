@@ -19,8 +19,8 @@ export class UserService implements IUserDBRepository {
         return this.user.findById(id);
     }
 
-    findByName(name: string, lastName: string): Promise<User[]> {
-        return this.user.findByName(name, lastName);
+    findByPhone(phone: number): Promise<User> {
+        return this.user.findByPhone(phone);
     }
 
     findByEmail(email: string): Promise<User> {

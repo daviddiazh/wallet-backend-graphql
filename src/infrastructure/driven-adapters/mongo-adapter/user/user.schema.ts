@@ -25,10 +25,10 @@ export class UserSpec extends Document implements IUser {
    
    @Prop({
         type: Number,
-        required: false,
+        required: true,
         trim: true,
     })
-   phone?: string; //TODO: Check it
+   phone: number;
 
    @Prop({
         type: String,

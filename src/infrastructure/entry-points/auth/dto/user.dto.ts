@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsString, IsEmail, IsNotEmpty, IsOptional, IsEnum, IsMongoId } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, IsOptional, IsNumber } from 'class-validator';
 import { IUser } from '../../../../domain/common/user/user.interface';
 
 export class CreateUserDto implements IUser {
@@ -8,9 +8,9 @@ export class CreateUserDto implements IUser {
     @IsNotEmpty()
     fullName: string;
 
-    @IsString()
+    @IsNumber()
     @IsOptional()
-    phone?: string;
+    phone: number;
 
     @IsEmail()
     @IsNotEmpty()

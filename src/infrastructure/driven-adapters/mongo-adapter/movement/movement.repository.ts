@@ -8,7 +8,7 @@ import { IMovementDBRepository } from "src/infrastructure/entry-points/movement/
 import { AccountSpec } from "../account/account.schema";
 
 
-export class AccountDBRepository implements IMovementDBRepository {
+export class MovementDBRepository implements IMovementDBRepository {
 
     constructor(
         @InjectModel('Movement') private readonly movementModel: Model<MovementSpec>,

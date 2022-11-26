@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, HttpStatus } from '@nestjs/common';
 import { MovementDBRepository } from '../../driven-adapters/mongo-adapter/movement/movement.repository';
 import { AccountDBRepository } from 'src/infrastructure/driven-adapters/mongo-adapter/account/account.repository';
 
@@ -65,6 +65,13 @@ export class MovementService {
         amount,
         fees: .6
       }
+
+      if( amount > fromUser.balance ) {
+        return {
+          message: 'El monto que quieres enviar sobrepasa tus fondos.',
+          code: HttpStatus.SERVICE_UNAVAILABLE
+        }
+      } 
 
       const movement = await this.movementRepository.create(payloadSave);
 

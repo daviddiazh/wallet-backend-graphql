@@ -1,5 +1,5 @@
 import { InjectModel } from "@nestjs/mongoose";
-import { BadRequestException, InternalServerErrorException, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { Model } from "mongoose";
 import { AccountSpec } from './account.schema';
 import { IAccountDBRepository } from '../../../entry-points/account/account.repository.types';

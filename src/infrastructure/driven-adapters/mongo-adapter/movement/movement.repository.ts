@@ -5,7 +5,6 @@ import { MovementSpec } from './movement.schema';
 import { MovementDto } from '../../../../domain/common/movement/movement.dto';
 import { Movement } from '../../../entry-points/movement/entities/movement.entity';
 import { IMovementDBRepository } from "src/infrastructure/entry-points/movement/movement.repository.types";
-import { AccountSpec } from "../account/account.schema";
 
 
 export class MovementDBRepository implements IMovementDBRepository {
@@ -59,10 +58,8 @@ export class MovementDBRepository implements IMovementDBRepository {
      async myMovementsByAccountId (id: string): Promise<Movement> {
         try {
             const foundMovementIncome = await this.movementModel.find({ accountId_Income: id });
-            console.log('foundMovementIncome: ', foundMovementIncome);
 
             const foundMovementOutcome = await this.movementModel.find({ accountId_Outcome: id });
-            console.log('foundMovementOutcome: ', foundMovementOutcome);
 
             return {
                 foundMovementIncome,

@@ -16,7 +16,10 @@ export class MovementService {
       const toUser = await this.accountRepository.findById(accountId_Income);
       
       if( !toUser ) {
-        throw new NotFoundException('user ID not found, please call to bank.');
+        return {
+          message: 'ID del usuario no encontrado, por favor comunicarse con el Banco.',
+          code: HttpStatus.SERVICE_UNAVAILABLE
+        };
       }
 
       const payloadSave = {
@@ -68,9 +71,9 @@ export class MovementService {
 
       if( amount > fromUser.balance ) {
         return {
-          message: 'El monto que quieres enviar sobrepasa tus fondos.',
+          message: 'El monto que estás transfiriendo sobrepasa tus fondos.',
           code: HttpStatus.SERVICE_UNAVAILABLE
-        }
+        };
       } 
 
       const movement = await this.movementRepository.create(payloadSave);

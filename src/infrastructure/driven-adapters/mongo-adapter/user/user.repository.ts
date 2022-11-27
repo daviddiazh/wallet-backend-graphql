@@ -1,5 +1,5 @@
 import { InjectModel } from "@nestjs/mongoose";
-import { BadRequestException, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
+import { BadRequestException, NotFoundException, ServiceUnavailableException, HttpStatus } from '@nestjs/common';
 import { Model } from "mongoose";
 import { UserSpec } from './user.schema';
 import { User } from '../../../entry-points/auth/entities/user.entity';
@@ -96,12 +96,15 @@ export class UserDBRepository implements IUserDBRepository {
      * @body email
      * @return user by email found - The user found
     */
-    async findByEmail (email: string): Promise<User> {
+    async findByEmail (email: string): Promise<any> {
         try {
-            const user: User = await this.userModel.findOne({email});
+            const user = await this.userModel.findOne({email});
 
             if ( !user ) {
-                throw new NotFoundException('Not found user by email - Repository (USER MODULE)');
+                return {
+                    message: 'Not found user by email - Repository (USER MODULE)',
+                    code: HttpStatus.NOT_FOUND
+                };
             }
 
             return user;

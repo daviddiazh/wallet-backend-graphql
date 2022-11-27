@@ -1,5 +1,5 @@
 import { InjectModel } from "@nestjs/mongoose";
-import { BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Model } from "mongoose";
 import { MovementSpec } from './movement.schema';
 import { MovementDto } from '../../../../domain/common/movement/movement.dto';
@@ -38,7 +38,10 @@ export class MovementDBRepository implements IMovementDBRepository {
             const foundMovement = await this.movementModel.findById({id});
 
             if( !foundMovement ) {
-                throw new NotFoundException('Account ID not found')
+                return {
+                    message: 'Cuenta de ahorros no encontrada.',
+                    code: HttpStatus.SERVICE_UNAVAILABLE
+                };
             }
 
             const { accountId_Outcome, accountId_Income, amount, reason } = foundMovement;

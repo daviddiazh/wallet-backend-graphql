@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, InternalServerErrorException, HttpStatus } from '@nestjs/common';
 import { UserDBRepository } from '../../driven-adapters/mongo-adapter/user/user.repository';
 import { LoginDto, signUpDto } from './dto/auth-dto';
 import { HashService } from '../../driven-adapters/hash-password-adapter/hash-password.service';
@@ -25,7 +25,7 @@ export class AuthService {
             });
 
             return {
-                ...user,
+                user: {...userData, id: (await user)._id + ''},
                 token: this.jwtService.sign({id: (await user)._id + ''})
             };
         } catch (error) {
@@ -39,17 +39,19 @@ export class AuthService {
             const { password: passwordByRequest, email: emailByRequest } = payload;
 
             const user = await this.auth.findByEmail(emailByRequest);
-            const { email, password, _id } = user;
+            const { fullName, phone, email, password, _id } = user;
 
             const isMatchPassword = await this.hashService.compare(passwordByRequest, password);
 
-            if( !isMatchPassword ){
-                throw new UnauthorizedException('Credentials are not valid');
+            if( !isMatchPassword || !email ){
+                return {
+                    message: 'Correo y/o contraseña incorrectos',
+                    code: HttpStatus.UNAUTHORIZED
+                };
             }
 
             return {
-                email, 
-                password,
+                user: {fullName, phone, email, id: _id + ''},
                 token: this.jwtService.sign({id: _id + ''})
             };
         } catch (error) {

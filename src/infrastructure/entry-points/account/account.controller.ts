@@ -1,4 +1,5 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 
@@ -6,11 +7,13 @@ import { CreateAccountDto } from './dto/create-account.dto';
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
+  @UseGuards( JwtAuthGuard )
   @Post('/create')
   create(@Body() createAccountDto: CreateAccountDto) {
     return this.accountService.create(createAccountDto);
   }
 
+  @UseGuards( JwtAuthGuard )
   @Post('/findById')
   findById(@Body() payload: any) {
     const { id } = payload;

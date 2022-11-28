@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport'
 import { AuthService } from './auth.service';
 import { signUpDto } from './dto/auth-dto';
@@ -19,6 +19,7 @@ export class AuthController {
     return this.authService.login(payload);
   }
 
+  
   @Get('/private')
   @UseGuards( AuthGuard() )
   testPrivateRoute() {

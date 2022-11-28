@@ -101,11 +101,12 @@ export class UserDBRepository implements IUserDBRepository {
             const user = await this.userModel.findOne({email});
 
             if ( !user ) {
-                return {
-                    message: 'Not found user by email - Repository (USER MODULE)',
-                    code: HttpStatus.NOT_FOUND
-                };
-            }
+                return new NotFoundException('Correo y/o contraseña incorrectos');
+                // return {
+                //     message: 'Not found user by email - Repository (USER MODULE)',
+                //     code: HttpStatus.NOT_FOUND
+                // };
+            } //TODO: Revisar porque acá no me lanza el NOT FOUND EXCEPTION y lanza el catch del login
 
             return user;
         } catch (error) {

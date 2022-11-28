@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule} from '@nestjs/jwt'
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 
 @Module({
@@ -25,13 +26,13 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         return {
           secret: configService.get('JWT_SECRET') || '',
           signOptions: {
-            expiresIn: '2h'
+            expiresIn: '10m'
           }
         }
       }
     }), 
   ],
-  providers: [AuthService, UserService, JwtStrategy ],
+  providers: [AuthService, UserService, JwtStrategy, JwtAuthGuard ],
   controllers: [AuthController, UserController, ],
   exports: [JwtStrategy, PassportModule, JwtModule]
 })

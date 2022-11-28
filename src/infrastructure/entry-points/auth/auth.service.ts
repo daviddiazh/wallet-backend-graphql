@@ -1,8 +1,8 @@
-import { Injectable, UnauthorizedException, InternalServerErrorException, HttpStatus } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, HttpStatus, BadRequestException, HttpException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { UserDBRepository } from '../../driven-adapters/mongo-adapter/user/user.repository';
 import { LoginDto, signUpDto } from './dto/auth-dto';
 import { HashService } from '../../driven-adapters/hash-password-adapter/hash-password.service';
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -43,12 +43,9 @@ export class AuthService {
 
             const isMatchPassword = await this.hashService.compare(passwordByRequest, password);
 
-            if( !isMatchPassword || !email ){
-                return {
-                    message: 'Correo y/o contraseña incorrectos',
-                    code: HttpStatus.UNAUTHORIZED
-                };
-            }
+            if( !isMatchPassword ){
+                return new BadRequestException('Correo y/o contraseña incorrectos')
+            } //TODO: replicar en todas partes
 
             return {
                 user: {fullName, phone, email, id: _id + ''},
@@ -56,7 +53,7 @@ export class AuthService {
             };
         } catch (error) {
             console.log('Down Service - login Authentication');
-            throw new InternalServerErrorException('Down Service - login Authentication');
+            throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
   

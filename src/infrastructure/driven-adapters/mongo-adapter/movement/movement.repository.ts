@@ -60,9 +60,9 @@ export class MovementDBRepository implements IMovementDBRepository {
     */
      async myMovementsByAccountId (id: string): Promise<Movement> {
         try {
-            const foundMovementIncome = await this.movementModel.find({ accountId_Income: id });
+            const foundMovementIncome = await this.movementModel.find({ accountId_Income: id }).sort({createdAt: -1});
 
-            const foundMovementOutcome = await this.movementModel.find({ accountId_Outcome: id });
+            const foundMovementOutcome = await this.movementModel.find({ accountId_Outcome: id }).sort({createdAt: -1});
 
             return {
                 foundMovementIncome,

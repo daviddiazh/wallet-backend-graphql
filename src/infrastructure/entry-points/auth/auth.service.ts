@@ -44,7 +44,7 @@ export class AuthService {
             const isMatchPassword = await this.hashService.compare(passwordByRequest, password);
 
             if( !isMatchPassword ){
-                return new BadRequestException('Correo y/o contraseña incorrectos')
+                throw new BadRequestException('Correo y/o contraseña incorrectos')
             } //TODO: replicar en todas partes
 
             return {
@@ -52,8 +52,13 @@ export class AuthService {
                 token: this.jwtService.sign({id: _id + ''})
             };
         } catch (error) {
-            console.log('Down Service - login Authentication');
-            throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(error.status) {
+                case 400: 
+                    throw error;
+                default:
+                    console.log('Down Service - login Authentication');
+                    throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 

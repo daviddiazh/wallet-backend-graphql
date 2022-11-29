@@ -19,7 +19,11 @@ export class AuthController {
     return this.authService.login(payload);
   }
 
-  
+  @Get('/checkToken')
+  checkToken(@Req() req: any) {
+    return this.authService.checkToken(req);
+  }
+
   @Get('/private')
   @UseGuards( AuthGuard() )
   testPrivateRoute() {

@@ -26,7 +26,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
         return {
           secret: configService.get('JWT_SECRET') || '',
           signOptions: {
-            expiresIn: '10m'
+            expiresIn: '20m' //TODO: check it
           }
         }
       }

@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, HttpStatus, BadRequestException, HttpException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, HttpStatus, BadRequestException, HttpException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserDBRepository } from '../../driven-adapters/mongo-adapter/user/user.repository';
 import { LoginDto, signUpDto } from './dto/auth-dto';
@@ -39,7 +39,7 @@ export class AuthService {
             const { password: passwordByRequest, email: emailByRequest } = payload;
 
             const user = await this.auth.findByEmail(emailByRequest);
-            const { fullName, phone, email, password, _id } = user;
+            const { fullName, phone, email, password, _id, profilePicture } = user;
 
             const isMatchPassword = await this.hashService.compare(passwordByRequest, password);
 
@@ -48,13 +48,35 @@ export class AuthService {
             } //TODO: replicar en todas partes
 
             return {
-                user: {fullName, phone, email, id: _id + ''},
+                user: {fullName, phone, email, id: _id + '', profilePicture},
                 token: this.jwtService.sign({id: _id + ''})
             };
         } catch (error) {
             console.log('Down Service - login Authentication');
             throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    async checkToken (req: Request) {
+
+        const token = req.headers['x-token'];
+        console.log('TOKEN: ', token)
+
+        if( !token ) return new UnauthorizedException('Su token ha expirado o no hay token en la petición');
+
+        try {
+            const { id } = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});
+            console.log('IS VALID')
+
+            return {
+                id,
+                message: 'token válido',
+                token,
+            }
+        } catch (error) {
+            return new UnauthorizedException('Su token ha expirado o no hay token en la petición');
+        } //TODO: Validar porque me devuelve code 200 en vez del 401
+
     }
   
 }

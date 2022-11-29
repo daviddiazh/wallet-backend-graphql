@@ -68,8 +68,10 @@ export class AuthService {
             const { id } = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});
             console.log('IS VALID')
 
+            const user = await this.auth.findById(id);
+
             return {
-                id,
+                user,
                 message: 'token válido',
                 token,
             }

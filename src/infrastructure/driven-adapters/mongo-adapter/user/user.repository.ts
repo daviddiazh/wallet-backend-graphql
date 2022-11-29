@@ -47,7 +47,7 @@ export class UserDBRepository implements IUserDBRepository {
     */
    async findById (id: string): Promise<User> {
         try {
-            const user = await this.userModel.findOne({id});
+            const user = await this.userModel.findById(id);
 
             if ( !user ) {
                 throw new NotFoundException('Not found user by id - Repository (USER MODULE)');

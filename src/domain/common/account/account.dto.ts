@@ -1,4 +1,4 @@
-import { IsMongoId, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Schema } from 'mongoose';
 import { IAccount } from './account.interface';
 
@@ -11,6 +11,10 @@ export class AccountDto implements IAccount {
     @IsNotEmpty()
     @IsMongoId()
     userId: Schema.Types.ObjectId;
+
+    @IsNotEmpty()
+    @IsString()
+    userEmail: string;
 
     @IsOptional()
     @IsNumber()

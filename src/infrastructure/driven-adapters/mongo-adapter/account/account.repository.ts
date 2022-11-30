@@ -44,6 +44,58 @@ export class AccountDBRepository implements IAccountDBRepository {
     }
 
     /**
+     * Find all accounts by userId
+     * @param id
+     * @return found accounts
+    */
+     async findByUserId (id: string): Promise<any> {
+        try {
+            const foundAccount: any = await this.accountModel.findOne({userId: id});
+
+            if( !foundAccount ) return;
+
+            const { balance: saldo, _id, userId, createdAt } = foundAccount
+
+            const balance = '$ ' + saldo?.toFixed(2)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+
+            return {
+                balance,
+                _id, 
+                userId, 
+                createdAt
+            };
+        } catch (error) {
+            this.handleExceptions(error);
+        }
+    }
+
+    /**
+     * Find all accounts by userEmail
+     * @param email
+     * @return found accounts
+    */
+     async findByUserEmail (email: string): Promise<any> {
+        try {
+            const foundAccount: any = await this.accountModel.findOne({userEmail: email});
+
+            if( !foundAccount ) return;
+
+            const { balance: saldo, _id, userId, createdAt } = foundAccount
+
+            const balance = '$ ' + saldo?.toFixed(2)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+
+            return {
+                balance,
+                _id, 
+                userId, 
+                createdAt
+            };
+        } catch (error) {
+            this.handleExceptions(error);
+        }
+    }
+
+    /**
      * Find an account by id and update balance
      * @param accountId, newBalance
      * @return found account and update balance

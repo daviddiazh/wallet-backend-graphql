@@ -1,5 +1,5 @@
 import { InjectModel } from "@nestjs/mongoose";
-import { BadRequestException, NotFoundException, ServiceUnavailableException, HttpStatus } from '@nestjs/common';
+import { BadRequestException, NotFoundException, ServiceUnavailableException, HttpStatus, HttpException } from '@nestjs/common';
 import { Model } from "mongoose";
 import { UserSpec } from './user.schema';
 import { User } from '../../../entry-points/auth/entities/user.entity';
@@ -35,8 +35,12 @@ export class UserDBRepository implements IUserDBRepository {
 
             return newObjectUser;
         } catch (error) {
-            console.log('Down Service in Create method on Repository - ADAPTER');
-            throw new ServiceUnavailableException(`Down Service in create method - user: ${error.message}`);
+            switch(error.status) {
+                case 400: 
+                    throw error;
+                default:
+                    throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
    }
 
@@ -50,7 +54,7 @@ export class UserDBRepository implements IUserDBRepository {
             const user = await this.userModel.findById(id);
 
             if ( !user ) {
-                throw new NotFoundException('Not found user by id - Repository (USER MODULE)');
+                throw new NotFoundException('Usuario no encontrado');
             }
 
             let newObjectUser = user;
@@ -59,8 +63,12 @@ export class UserDBRepository implements IUserDBRepository {
 
             return newObjectUser;
         } catch (error) {
-            console.log('Down Service in FindById method on Repository - ADAPTER');
-            throw new ServiceUnavailableException(`Down Service in find by id method: ${error.message}`);
+            switch(error.status) {
+                case 404: 
+                    throw error;
+                default:
+                    throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
    }
 
@@ -74,7 +82,7 @@ export class UserDBRepository implements IUserDBRepository {
             const users: any = await this.userModel.findOne({phone});
 
             if ( !users ) {
-                throw new NotFoundException('Not found user by phone - Repository (USER MODULE)');
+                throw new NotFoundException('Usuario no encontrado');
             }
 
             let newObjectUsers = users;
@@ -86,8 +94,13 @@ export class UserDBRepository implements IUserDBRepository {
 
             return returnUsers;
         } catch (error) {
-            console.log('Down Service in FindByName method on Repository - ADAPTER');
-            throw new ServiceUnavailableException(`Down Service in findByPhone method: ${error.message}`);
+            switch(error.status) {
+                case 404: 
+                    throw error;
+                default:
+                    console.log('Down Service in FindByName method on Repository - ADAPTER');
+                    throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
    }
 
@@ -101,17 +114,18 @@ export class UserDBRepository implements IUserDBRepository {
             const user = await this.userModel.findOne({email});
 
             if ( !user ) {
-                return new NotFoundException('Correo y/o contraseña incorrectos');
-                // return {
-                //     message: 'Not found user by email - Repository (USER MODULE)',
-                //     code: HttpStatus.NOT_FOUND
-                // };
-            } //TODO: Revisar porque acá no me lanza el NOT FOUND EXCEPTION y lanza el catch del login
+                throw new BadRequestException('Correo y/o contraseña incorrectos');
+            }
 
             return user;
         } catch (error) {
-            console.log('Down Service in FindByName method on Repository - ADAPTER');
-            throw new ServiceUnavailableException(`Down Service in findByEmail method: ${error.message}`);
+            switch(error.status) {
+                case 400: 
+                console.log('error', error)
+                    throw error;
+                default:
+                    throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
    }
 
@@ -135,7 +149,6 @@ export class UserDBRepository implements IUserDBRepository {
 
             return returnUsers;
         } catch (error) {
-            console.log('Down Service in FINDALL method on Repository - ADAPTER');
             throw new ServiceUnavailableException(`Down Service in findAll method: ${error.message}`);
         }
    }

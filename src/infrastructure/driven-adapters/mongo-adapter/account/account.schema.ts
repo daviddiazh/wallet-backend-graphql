@@ -25,10 +25,17 @@ export class AccountSpec extends Document implements IAccount {
     userId: SchemaMongoose.Types.ObjectId;
 
     @Prop({
+        type: String,
+        required: true,
+        trim: true,
+    })
+    userEmail: string;
+
+    @Prop({
         type: Number,
         required: false,
         trim: true,
-        default: 1000000
+        default: 0
     })
     balance?: number;
 

@@ -3,12 +3,14 @@ import { JwtService } from '@nestjs/jwt';
 import { UserDBRepository } from '../../driven-adapters/mongo-adapter/user/user.repository';
 import { LoginDto, signUpDto } from './dto/auth-dto';
 import { HashService } from '../../driven-adapters/hash-password-adapter/hash-password.service';
+import { AccountService } from '../account/account.service';
 
 @Injectable()
 export class AuthService {
 
     constructor(
         private readonly auth: UserDBRepository,
+        private readonly accountService: AccountService,
         private readonly hashService: HashService,
         private readonly jwtService: JwtService
     ){}
@@ -24,9 +26,11 @@ export class AuthService {
                 password: passwordEncrypted
             });
 
+            await this.accountService.create({userId: (await user)._id, userEmail: (await user).email})
+
             return {
-                user: {...userData, id: (await user)._id + ''},
-                token: this.jwtService.sign({id: (await user)._id + ''})
+                user: {...userData, id: (await user)._id},
+                token: this.jwtService.sign({id: (await user)._id})
             };
         } catch (error) {
             console.log('Down Service - signUp Authentication');
@@ -48,8 +52,8 @@ export class AuthService {
             } //TODO: replicar en todas partes
 
             return {
-                user: {fullName, phone, email, id: _id + '', profilePicture},
-                token: this.jwtService.sign({id: _id + ''})
+                user: {fullName, phone, email, id: (await user)._id, profilePicture},
+                token: this.jwtService.sign({id: _id})
             };
         } catch (error) {
             switch(error.status) {
@@ -71,7 +75,7 @@ export class AuthService {
 
         try {
             const { id } = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});
-            console.log('IS VALID')
+            console.log('IS VALID', id)
 
             const user = await this.auth.findById(id);
 
@@ -81,7 +85,15 @@ export class AuthService {
                 token,
             }
         } catch (error) {
-            return new UnauthorizedException('Su token ha expirado o no hay token en la petición');
+            console.log('entro al catch, ', error)
+            switch(error.status) { //TODO: Configurarlo en el front y Probarlo
+                case 'TokenExpiredError: jwt expired':
+                case 401: 
+                    console.log('entro en el 401')
+                    throw error;
+                default:
+                    throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         } //TODO: Validar porque me devuelve code 200 en vez del 401
 
     }

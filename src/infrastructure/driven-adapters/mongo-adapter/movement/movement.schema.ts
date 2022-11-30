@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as SchemaMongoose } from 'mongoose';
+import { timestamp } from 'rxjs';
 import { IMovement } from '../../../../domain/common/movement/movement.interface';
 
 @Schema({
@@ -52,6 +53,13 @@ export class MovementSpec extends Document implements IMovement {
         trim: true,
     })
     fees?: number;
+
+    @Prop({
+        type: timestamp,
+        required: false,
+        trim: true,
+    })
+    createdAt?: any
 
 }
 

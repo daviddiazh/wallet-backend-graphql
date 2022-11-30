@@ -64,10 +64,45 @@ export class MovementDBRepository implements IMovementDBRepository {
 
             const foundMovementOutcome = await this.movementModel.find({ accountId_Outcome: id }).sort({createdAt: -1});
 
-            return {
-                foundMovementIncome,
-                foundMovementOutcome
-            };
+            const myMovementsIncome = foundMovementIncome.map(movement => {
+                const { _id, accountId_Income, accountId_Outcome, reason, amount: valor, fees, createdAt } = movement
+
+                const amount = '$ ' + valor?.toFixed(2)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                
+                return {
+                    _id, 
+                    accountId_Income, 
+                    accountId_Outcome, 
+                    reason,
+                    amount,
+                    fees, 
+                    createdAt
+                }
+            });
+
+            const myMovementsOutcome = foundMovementOutcome.map(movement => {
+                const { _id, accountId_Income, accountId_Outcome, reason, amount: valor, fees, createdAt } = movement
+
+                const amount = '$ ' + valor?.toFixed(2)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+
+                return {
+                    _id, 
+                    accountId_Income, 
+                    accountId_Outcome, 
+                    reason,
+                    amount,
+                    fees, 
+                    createdAt
+                }
+            });
+
+            const myMovementsList = myMovementsIncome.concat(myMovementsOutcome);
+
+            return myMovementsList;
+            // return {
+            //     foundMovementIncome,
+            //     foundMovementOutcome
+            // };
         } catch (error) {
             this.handleExceptions(error);
         }

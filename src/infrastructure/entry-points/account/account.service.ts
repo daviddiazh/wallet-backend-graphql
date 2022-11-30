@@ -19,6 +19,14 @@ export class AccountService implements IAccountDBRepository {
     return this.accountRepository.findById(id);
   }
 
+  findByUserId(id: string) {
+    return this.accountRepository.findByUserId(id);
+  }
+
+  findByUserEmail(email: string) {
+    return this.accountRepository.findByUserEmail(email);
+  }
+  
   updateBalance(accountId: string, newBalance: number): Promise<Account> {
     return this.accountRepository.updateBalance(accountId, newBalance);
   }

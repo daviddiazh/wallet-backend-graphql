@@ -20,6 +20,20 @@ export class AccountController {
     return this.accountService.findById(id);
   }
 
+  @UseGuards( JwtAuthGuard )
+  @Post('/findByUserId')
+  findByUserId(@Body() payload: any) {
+    const { userId } = payload;
+    return this.accountService.findByUserId(userId);
+  }
+
+  @UseGuards( JwtAuthGuard )
+  @Post('/findByUserEmail')
+  findByUserEmail(@Body() payload: any) {
+    const { userEmail } = payload;
+    return this.accountService.findByUserEmail(userEmail);
+  }
+
   // @Get('/findById')
   // findById(@Body() id: string) {
   //   return this.accountService.findById(id);

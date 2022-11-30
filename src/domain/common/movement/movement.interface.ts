@@ -7,6 +7,6 @@ export interface IMovement {
     reason: string;
     amount: number;
     fees?: number;
-    createdAt?: Date | number | string;
-    updatedAt?: Date | number | string;
+    createdAt?: any;
+    updatedAt?: any;
 }

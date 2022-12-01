@@ -69,13 +69,11 @@ export class AuthService {
     async checkToken (req: Request) {
 
         const token = req.headers['x-token'];
-        console.log('TOKEN: ', token)
 
         if( !token ) return new UnauthorizedException('Su token ha expirado o no hay token en la petición');
 
         try {
             const { id } = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});
-            console.log('IS VALID', id)
 
             const user = await this.auth.findById(id);
 
@@ -85,7 +83,7 @@ export class AuthService {
                 token,
             }
         } catch (error) {
-            console.log('entro al catch, ', error)
+            console.log(error)
             switch(error.status) { //TODO: Configurarlo en el front y Probarlo
                 case 'TokenExpiredError: jwt expired':
                 case 401: 

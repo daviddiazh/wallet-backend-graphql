@@ -61,11 +61,13 @@ export class MovementService {
         throw new NotFoundException('Account ID OUTCOME not found from user, please call to bank.');
       }
 
+      const amountParsed = parseInt(amount)
+
       const payloadSave: any = {
         accountId_Income,
         accountId_Outcome,
         reason,
-        amount,
+        amount: amountParsed,
         fees: .6
       }
 
@@ -74,7 +76,7 @@ export class MovementService {
           message: 'El monto que estás transfiriendo sobrepasa tus fondos.',
           code: HttpStatus.SERVICE_UNAVAILABLE
         };
-      } 
+      }
 
       const movement = await this.movementRepository.create(payloadSave);
 

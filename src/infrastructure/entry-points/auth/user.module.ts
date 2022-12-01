@@ -27,7 +27,7 @@ import { AccountService } from '../account/account.service';
         return {
           secret: configService.get('JWT_SECRET') || '',
           signOptions: {
-            expiresIn: '25m' //TODO: check it
+            expiresIn: '35m' //TODO: check it
           }
         }
       }

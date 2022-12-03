@@ -60,11 +60,23 @@ export class MovementDBRepository implements IMovementDBRepository {
     */
      async myMovementsByAccountId (id: string): Promise<Movement> {
         try {
+            
             const foundMovementIncome = await this.movementModel.find({ accountId_Income: id }).sort({createdAt: -1});
 
             const foundMovementOutcome = await this.movementModel.find({ accountId_Outcome: id }).sort({createdAt: -1});
 
-            const myMovementsIncome = foundMovementIncome.map(movement => {
+            const concatMovements = foundMovementIncome.concat(foundMovementOutcome);
+
+            concatMovements.sort(function(a, b) {
+                if (a.createdAt < b.createdAt) {
+                    return 1;
+                }
+                if (a.createdAt > b.createdAt) {
+                    return -1;
+                }
+            })
+
+            const myMovementsList = concatMovements.map(movement => {
                 const { _id, accountId_Income, accountId_Outcome, reason, amount: valor, fees, createdAt } = movement
 
                 const amount = '$ ' + valor?.toFixed(2)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -79,30 +91,7 @@ export class MovementDBRepository implements IMovementDBRepository {
                     createdAt
                 }
             });
-
-            const myMovementsOutcome = foundMovementOutcome.map(movement => {
-                const { _id, accountId_Income, accountId_Outcome, reason, amount: valor, fees, createdAt } = movement
-
-                const amount = '$ ' + valor?.toFixed(2)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-
-                return {
-                    _id, 
-                    accountId_Income, 
-                    accountId_Outcome, 
-                    reason,
-                    amount,
-                    fees, 
-                    createdAt
-                }
-            });
-
-            const myMovementsList = myMovementsIncome.concat(myMovementsOutcome);
-
             return myMovementsList;
-            // return {
-            //     foundMovementIncome,
-            //     foundMovementOutcome
-            // };
         } catch (error) {
             this.handleExceptions(error);
         }

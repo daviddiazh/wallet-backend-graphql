@@ -38,10 +38,7 @@ export class MovementDBRepository implements IMovementDBRepository {
             const foundMovement = await this.movementModel.findById({id});
 
             if( !foundMovement ) {
-                return {
-                    message: 'Cuenta de ahorros no encontrada.',
-                    code: HttpStatus.SERVICE_UNAVAILABLE
-                };
+                throw new NotFoundException('Cuenta de ahorros no encontrada')
             }
 
             const { accountId_Outcome, accountId_Income, amount, reason } = foundMovement;
@@ -76,7 +73,7 @@ export class MovementDBRepository implements IMovementDBRepository {
                 }
             })
 
-            const myMovementsList = concatMovements.map(movement => {
+            const myMovementsList: any = concatMovements.map(movement => {
                 const { _id, accountId_Income, accountId_Outcome, reason, amount: valor, fees, createdAt } = movement
 
                 const amount = '$ ' + valor?.toFixed(2)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');

@@ -1,5 +1,4 @@
-import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Schema } from 'mongoose';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AccountService } from '../../account/account.service';
 import { AccountGQL, AccountGQLFBUI } from './entities/account-gql.entity';
 import { UpdateBalanceDto } from './dtos/input/update-balance.dto';
@@ -10,6 +9,8 @@ export class AccountResolver {
     constructor(
         private readonly accountService: AccountService,
     ){}
+
+    //TODO: Management mistakes in responses
 
     @Query( () => AccountGQL, { name: 'findById' } )
     findById(@Args('id', { type: () => ID }) id: string ) {

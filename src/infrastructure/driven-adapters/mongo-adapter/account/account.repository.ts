@@ -54,7 +54,7 @@ export class AccountDBRepository implements IAccountDBRepository {
 
             if( !foundAccount ) return;
 
-            const { balance: saldo, _id, userId, createdAt } = foundAccount
+            const { balance: saldo, _id, userId, createdAt, updatedAt } = foundAccount
 
             const balance = '$ ' + saldo?.toFixed(2)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 
@@ -62,7 +62,8 @@ export class AccountDBRepository implements IAccountDBRepository {
                 balance,
                 _id, 
                 userId, 
-                createdAt
+                createdAt,
+                updatedAt
             };
         } catch (error) {
             this.handleExceptions(error);

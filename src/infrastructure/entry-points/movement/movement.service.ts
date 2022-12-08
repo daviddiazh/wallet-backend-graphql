@@ -1,6 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException, HttpStatus } from '@nestjs/common';
 import { MovementDBRepository } from '../../driven-adapters/mongo-adapter/movement/movement.repository';
 import { AccountDBRepository } from 'src/infrastructure/driven-adapters/mongo-adapter/account/account.repository';
+import { Movement } from './entities/movement.entity';
 
 @Injectable()
 export class MovementService {
@@ -16,10 +17,7 @@ export class MovementService {
       const toUser = await this.accountRepository.findById(accountId_Income);
       
       if( !toUser ) {
-        return {
-          message: 'ID del usuario no encontrado, por favor comunicarse con el Banco.',
-          code: HttpStatus.SERVICE_UNAVAILABLE
-        };
+        throw new NotFoundException('ID del usuario no encontrado, por favor comunicarse con el Banco')
       }
 
       const payloadSave = {

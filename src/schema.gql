@@ -29,6 +29,22 @@ type AccountGQLFBUI {
   updatedAt: DateTime!
 }
 
+type Movement {
+  _id: ID!
+  accountId_Income: ID!
+  accountId_Outcome: ID!
+  reason: String!
+  amount: Int!
+  fees: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type RequestCredit {
+  movement: Movement!
+  updateBalance: AccountGQL!
+}
+
 type Query {
   findById(id: ID!): AccountGQL!
   findByUserId(id: ID!): AccountGQLFBUI!
@@ -37,9 +53,16 @@ type Query {
 
 type Mutation {
   updateBalance(updateBalance: UpdateBalanceDto!): AccountGQL!
+  requestCredit(requestCredit: RequestCreditDto!): RequestCredit!
 }
 
 input UpdateBalanceDto {
   accountId: ID!
   newBalance: Int!
+}
+
+input RequestCreditDto {
+  accountId_Income: ID!
+  amount: Int!
+  reason: String!
 }

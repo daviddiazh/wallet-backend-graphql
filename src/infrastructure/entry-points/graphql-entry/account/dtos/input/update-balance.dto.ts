@@ -10,7 +10,7 @@ export class UpdateBalanceDto {
     
     @Field( () => Int )
     @IsNotEmpty()
-    // @IsInt()
+    // @IsInt() //TODO: Check it
     newBalance: number
 
 }

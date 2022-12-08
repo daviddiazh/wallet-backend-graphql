@@ -3,6 +3,7 @@
 ## Stack usado
 - NestJS
 - TypeScript
+- GraphQL - Apollo
 - MongoDB
 - Docker Compose (DEV Mode)
 

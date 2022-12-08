@@ -18,7 +18,6 @@ import { GraphqlEntryModule } from '../infrastructure/entry-points/graphql-entry
     HashModule,
     DatabaseModule,
     UserModule,
-    UserModule,
     AccountModule,
     MovementModule,
 

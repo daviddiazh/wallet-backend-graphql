@@ -65,13 +65,13 @@ type Query {
   findById(id: ID!): AccountGQL!
   findByUserId(id: ID!): AccountGQLFBUI!
   findByUserEmail(email: String!): AccountGQLFBUI!
+  myMovementsByAccountId(id: String!): [MovementsList!]!
 }
 
 type Mutation {
   updateBalance(updateBalance: UpdateBalanceDto!): AccountGQL!
   requestCredit(requestCredit: RequestCreditDto!): RequestCredit!
   moneyTransfer(moneyTransfer: MoneyTransferDto!): MoneyTransfer!
-  myMovementsByAccountId(id: String!): [MovementsList!]!
 }
 
 input UpdateBalanceDto {

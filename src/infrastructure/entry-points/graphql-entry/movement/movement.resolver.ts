@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MovementService } from '../../movement/movement.service';
 import { RequestCreditDto } from './dtos/input/request-credit.dto';
 import { RequestCredit } from './entity/request-credit.entity';
@@ -23,7 +23,7 @@ export class MovementResolver {
         return this.movementService.moneyTransfer( moneyTransferDto );
     }
 
-    @Mutation( () => [ MovementsList ], { name: 'myMovementsByAccountId' } )
+    @Query( () => [ MovementsList ], { name: 'myMovementsByAccountId' } )
     myMovementsByAccountId(@Args('id') id: string) {
         return this.movementService.myMovementsByAccountId( id );
     }

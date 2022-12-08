@@ -72,7 +72,7 @@ export class UserDBRepository implements IUserDBRepository {
         }
    }
 
-   /**
+    /**
      * Find a User
      * @body phone
      * @return user by phone found - The user found
@@ -104,7 +104,7 @@ export class UserDBRepository implements IUserDBRepository {
         }
    }
 
-   /**
+    /**
      * Find a User
      * @body email
      * @return user by email found - The user found
@@ -177,7 +177,7 @@ export class UserDBRepository implements IUserDBRepository {
         }
    }
 
-   /**
+    /**
      * Delete a User
      * @params id
      * @return delete user - The user deleted

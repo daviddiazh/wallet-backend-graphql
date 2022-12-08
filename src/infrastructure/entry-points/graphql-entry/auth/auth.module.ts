@@ -10,8 +10,6 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { AccountService } from '../../account/account.service';
 
 @Module({
-  // providers: [AuthResolver]
-
 
   imports: [ 
     PassportModule,
@@ -33,7 +31,8 @@ import { AccountService } from '../../account/account.service';
       }
     }), 
   ],
-  providers: [AuthService, UserService, JwtStrategy, JwtAuthGuard, AccountService ],
+
+  providers: [ AuthResolver, AuthService, UserService, JwtStrategy, JwtAuthGuard, AccountService ],
   exports: [JwtStrategy, PassportModule, JwtModule]
 
 

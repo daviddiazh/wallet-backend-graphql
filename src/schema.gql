@@ -61,17 +61,36 @@ type MovementsList {
   createdAt: DateTime!
 }
 
+type User {
+  _id: ID!
+  id: ID!
+  fullName: String!
+  phone: Int!
+  email: String!
+  password: String
+  clientState: Int!
+}
+
+type SignUpOrLogin {
+  user: User!
+  token: String!
+}
+
 type Query {
   findById(id: ID!): AccountGQL!
   findByUserId(id: ID!): AccountGQLFBUI!
   findByUserEmail(email: String!): AccountGQLFBUI!
   myMovementsByAccountId(id: String!): [MovementsList!]!
+  findUserById(id: String!): User!
+  findUserByEmail(email: String!): User!
 }
 
 type Mutation {
   updateBalance(updateBalance: UpdateBalanceDto!): AccountGQL!
   requestCredit(requestCredit: RequestCreditDto!): RequestCredit!
   moneyTransfer(moneyTransfer: MoneyTransferDto!): MoneyTransfer!
+  signUp(signUp: SignUpDto!): SignUpOrLogin!
+  login(login: LoginDtoGQL!): SignUpOrLogin!
 }
 
 input UpdateBalanceDto {
@@ -90,4 +109,18 @@ input MoneyTransferDto {
   accountId_Outcome: ID!
   reason: String!
   amount: Int!
+}
+
+input SignUpDto {
+  fullName: String!
+  phone: Int!
+  email: String!
+  password: String!
+  clientState: Int!
+  profilePicture: String!
+}
+
+input LoginDtoGQL {
+  email: String!
+  password: String!
 }

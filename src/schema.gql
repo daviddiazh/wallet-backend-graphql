@@ -45,6 +45,12 @@ type RequestCredit {
   updateBalance: AccountGQL!
 }
 
+type MoneyTransfer {
+  movement: Movement!
+  savedBalanceIncome: AccountGQL!
+  savedBalanceOutcome: AccountGQL!
+}
+
 type Query {
   findById(id: ID!): AccountGQL!
   findByUserId(id: ID!): AccountGQLFBUI!
@@ -54,6 +60,7 @@ type Query {
 type Mutation {
   updateBalance(updateBalance: UpdateBalanceDto!): AccountGQL!
   requestCredit(requestCredit: RequestCreditDto!): RequestCredit!
+  moneyTransfer(moneyTransfer: MoneyTransferDto!): MoneyTransfer!
 }
 
 input UpdateBalanceDto {
@@ -65,4 +72,11 @@ input RequestCreditDto {
   accountId_Income: ID!
   amount: Int!
   reason: String!
+}
+
+input MoneyTransferDto {
+  accountId_Income: ID!
+  accountId_Outcome: ID!
+  reason: String!
+  amount: Int!
 }

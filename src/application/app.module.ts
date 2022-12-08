@@ -7,6 +7,11 @@ import { ConfigModule } from '@nestjs/config';
 import config from './config';
 import { AccountModule } from '../infrastructure/entry-points/account/account.module';
 import { MovementModule } from '../infrastructure/entry-points/movement/movement.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
+import { GraphqlEntryModule } from '../infrastructure/entry-points/graphql-entry/graphql-entry.module';
 
 @Module({
   imports: [
@@ -17,12 +22,26 @@ import { MovementModule } from '../infrastructure/entry-points/movement/movement
     AccountModule,
     MovementModule,
 
+    GraphqlEntryModule,
+
     ConfigModule.forRoot({
       envFilePath: '.env',
       load: [config],
       isGlobal: true
     }),
-    ],
-  controllers: [AppController]
+
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      // debug: false,
+      playground: false,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      plugins: [
+        ApolloServerPluginLandingPageLocalDefault
+      ]
+    }),
+
+  ],
+
+  controllers: [ AppController ]
 })
 export class AppModule {}

@@ -51,6 +51,16 @@ type MoneyTransfer {
   savedBalanceOutcome: AccountGQL!
 }
 
+type MovementsList {
+  _id: ID!
+  accountId_Income: ID!
+  accountId_Outcome: ID!
+  reason: String!
+  amount: String!
+  fees: Float!
+  createdAt: DateTime!
+}
+
 type Query {
   findById(id: ID!): AccountGQL!
   findByUserId(id: ID!): AccountGQLFBUI!
@@ -61,6 +71,7 @@ type Mutation {
   updateBalance(updateBalance: UpdateBalanceDto!): AccountGQL!
   requestCredit(requestCredit: RequestCreditDto!): RequestCredit!
   moneyTransfer(moneyTransfer: MoneyTransferDto!): MoneyTransfer!
+  myMovementsByAccountId(id: String!): [MovementsList!]!
 }
 
 input UpdateBalanceDto {

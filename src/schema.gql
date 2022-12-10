@@ -71,11 +71,6 @@ type User {
   clientState: Int!
 }
 
-type SignUpOrLogin {
-  user: User!
-  token: String!
-}
-
 type Query {
   findById(id: ID!): AccountGQL!
   findByUserId(id: ID!): AccountGQLFBUI!
@@ -83,14 +78,27 @@ type Query {
   myMovementsByAccountId(id: String!): [MovementsList!]!
   findUserById(id: String!): User!
   findUserByEmail(email: String!): User!
+  checkToken(token: String!): AuthUnion!
+}
+
+union AuthUnion = SignUpOrLogin | StatusError
+
+type SignUpOrLogin {
+  user: User!
+  token: String!
+}
+
+type StatusError {
+  code: Int!
+  description: String!
 }
 
 type Mutation {
   updateBalance(updateBalance: UpdateBalanceDto!): AccountGQL!
   requestCredit(requestCredit: RequestCreditDto!): RequestCredit!
   moneyTransfer(moneyTransfer: MoneyTransferDto!): MoneyTransfer!
-  signUp(signUp: SignUpDto!): SignUpOrLogin!
-  login(login: LoginDtoGQL!): SignUpOrLogin!
+  signUp(signUp: SignUpDto!): AuthUnion!
+  login(login: LoginDtoGQL!): AuthUnion!
 }
 
 input UpdateBalanceDto {

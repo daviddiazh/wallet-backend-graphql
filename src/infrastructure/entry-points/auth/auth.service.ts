@@ -4,6 +4,8 @@ import { UserDBRepository } from '../../driven-adapters/mongo-adapter/user/user.
 import { LoginDto, signUpDto } from './dto/auth-dto';
 import { HashService } from '../../driven-adapters/hash-password-adapter/hash-password.service';
 import { AccountService } from '../account/account.service';
+import { GraphQLError } from 'graphql';
+import { ResponseEntity } from '../../../domain/common/response-entity';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +14,7 @@ export class AuthService {
         private readonly auth: UserDBRepository,
         private readonly accountService: AccountService,
         private readonly hashService: HashService,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
     ){}
 
     async signUp (payload: signUpDto): Promise<object | any> { //TODO: Change method name
@@ -56,13 +58,14 @@ export class AuthService {
                 token: this.jwtService.sign({id: _id})
             };
         } catch (error) {
-            switch(error.status) {
-                case 400: 
-                    throw error;
-                default:
-                    console.log('Down Service - login Authentication');
-                    throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            return new ResponseEntity(400, 'Correo y/o contraseña incorrecta.');
+            // switch(error.status) {
+            //     case 400: 
+            //         throw error;
+            //     default:
+            //         console.log('Down Service - login Authentication');
+            //         throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
+            // }
         }
     }
 
@@ -92,6 +95,43 @@ export class AuthService {
                 default:
                     throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
             }
+        } //TODO: Validar porque me devuelve code 200 en vez del 401
+
+    }
+
+    validateBodyAuth( token: string ) {
+        if(token){
+            return true;
+        }
+
+        return false;
+    }
+
+    async checkTokenGQL (token: string) { 
+
+        if( !token ) return new UnauthorizedException('Su token ha expirado o no hay token en la petición');
+
+        try {
+            const { id } = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});
+
+            const user = await this.auth.findById(id);
+
+            return {
+                user,
+                token,
+            }
+        } catch (error) {
+            console.log(error)
+            return new ResponseEntity(401, 'Parece que la sesión expiró, por favor ingresa de nuevo');
+            // throw error;
+
+            // switch(error.status) { //TODO: Configurarlo en el front y Probarlo
+            //     case 401: 
+            //         console.log('entro en el 401')
+            //         throw error;
+            //     default:
+            //         throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
+            // }
         } //TODO: Validar porque me devuelve code 200 en vez del 401
 
     }

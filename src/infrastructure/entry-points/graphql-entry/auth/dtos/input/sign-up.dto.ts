@@ -9,11 +9,6 @@ export class SignUpDto {
     @IsString()
     fullName: string;
 
-    @Field( () => Int )
-    @IsNotEmpty()
-    @IsInt()
-    phone: number;
-
     @Field( () => String )
     @IsNotEmpty()
     @IsString()
@@ -25,12 +20,17 @@ export class SignUpDto {
     password: string;
 
     @Field( () => Int )
+    @IsNotEmpty()
+    @IsInt()
+    phone: number;
+
+    @Field( () => Int, { nullable: true } )
     @IsOptional()
     @IsInt()
     clientState?: number;
 
-    @Field( () => String )
-    @IsEmpty()
+    @Field( () => String, { nullable: true } )
+    @IsOptional()
     @IsString()
     profilePicture?: string;
 

@@ -113,11 +113,11 @@ input MoneyTransferDto {
 
 input SignUpDto {
   fullName: String!
-  phone: Int!
   email: String!
   password: String!
-  clientState: Int!
-  profilePicture: String!
+  phone: Int!
+  clientState: Int
+  profilePicture: String
 }
 
 input LoginDtoGQL {

@@ -31,12 +31,13 @@ export class AuthService {
             await this.accountService.create({userId: (await user)._id, userEmail: (await user).email})
 
             return {
-                user: {...userData, id: (await user)._id},
+                user: {...userData, _id: (await user)._id},
                 token: this.jwtService.sign({id: (await user)._id})
             };
         } catch (error) {
             console.log('Down Service - signUp Authentication');
-            throw new InternalServerErrorException('Down Service - signUp Authentication')
+            return new ResponseEntity(400, 'Registro incorrecto.', 'El correo ya se encuentra registrado.');
+            // throw new InternalServerErrorException('Down Service - signUp Authentication')
         }
     }
 
@@ -50,15 +51,15 @@ export class AuthService {
             const isMatchPassword = await this.hashService.compare(passwordByRequest, password);
 
             if( !isMatchPassword ){
-                throw new BadRequestException('Correo y/o contraseña incorrectos')
+                throw new BadRequestException('Credenciales incorrectas.')
             } //TODO: replicar en todas partes
 
             return {
-                user: {fullName, phone, email, id: (await user)._id, profilePicture},
+                user: {fullName, phone, email, _id: (await user)._id, profilePicture},
                 token: this.jwtService.sign({id: _id})
             };
         } catch (error) {
-            return new ResponseEntity(400, 'Correo y/o contraseña incorrecta.');
+            return new ResponseEntity(400, 'Ingreso incorrecto.', 'Credenciales incorrectas.');
             // switch(error.status) {
             //     case 400: 
             //         throw error;
@@ -99,17 +100,9 @@ export class AuthService {
 
     }
 
-    validateBodyAuth( token: string ) {
-        if(token){
-            return true;
-        }
-
-        return false;
-    }
-
     async checkTokenGQL (token: string) { 
 
-        if( !token ) return new UnauthorizedException('Su token ha expirado o no hay token en la petición');
+        if( !token ) return new ResponseEntity(401, 'Ocurrio un error.', 'Estamos presentando fallas en el servicio.');
 
         try {
             const { id } = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});
@@ -122,7 +115,7 @@ export class AuthService {
             }
         } catch (error) {
             console.log(error)
-            return new ResponseEntity(401, 'Parece que la sesión expiró, por favor ingresa de nuevo');
+            return new ResponseEntity(401, 'Expiró la sesión', 'La sesión finalizo, por favor ingresa de nuevo.');
             // throw error;
 
             // switch(error.status) { //TODO: Configurarlo en el front y Probarlo

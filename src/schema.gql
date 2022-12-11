@@ -90,6 +90,7 @@ type SignUpOrLogin {
 
 type StatusError {
   code: Int!
+  title: String!
   description: String!
 }
 

@@ -2,6 +2,7 @@ import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AccountService } from '../../account/account.service';
 import { AccountGQL, AccountGQLFBUI } from './entities/account-gql.entity';
 import { UpdateBalanceDto } from './dtos/input/update-balance.dto';
+import { AccountGQLUnion, AccountGQLFBUIUnion } from '../common/unions/account';
 
 @Resolver()
 export class AccountResolver {
@@ -10,14 +11,12 @@ export class AccountResolver {
         private readonly accountService: AccountService,
     ){}
 
-    //TODO: Management mistakes in responses
-
-    @Query( () => AccountGQL, { name: 'findById' } )
+    @Query( () => AccountGQLUnion, { name: 'findById' } )
     findById(@Args('id', { type: () => ID }) id: string ) {
         return this.accountService.findById( id );
     }
 
-    @Query( () => AccountGQLFBUI, { name: 'findByUserId' } )
+    @Query( () => AccountGQLFBUIUnion, { name: 'findByUserId' } )
     findByUserId(@Args('id', { type: () => ID }) id: string) {
         return this.accountService.findByUserId( id );
     }

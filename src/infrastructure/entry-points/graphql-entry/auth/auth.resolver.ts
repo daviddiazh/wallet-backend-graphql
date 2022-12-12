@@ -3,7 +3,6 @@ import { AuthService } from '../../auth/auth.service';
 import { UserService } from '../../auth/user.service';
 import { User } from './entity/user.entity';
 import { SignUpDto } from './dtos/input/sign-up.dto';
-import { SignUpOrLogin } from './entity/sign-up-or-login.entity';
 import { LoginDtoGQL } from './dtos/input/login.dto';
 import { AuthUnion } from '../common/unions/auth';
 

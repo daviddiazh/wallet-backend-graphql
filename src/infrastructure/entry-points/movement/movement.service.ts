@@ -2,6 +2,7 @@ import { Injectable, BadRequestException, NotFoundException, HttpStatus } from '
 import { MovementDBRepository } from '../../driven-adapters/mongo-adapter/movement/movement.repository';
 import { AccountDBRepository } from 'src/infrastructure/driven-adapters/mongo-adapter/account/account.repository';
 import { Movement } from './entities/movement.entity';
+import { ResponseEntity } from '../../../domain/common/response-entity';
 
 @Injectable()
 export class MovementService {
@@ -48,15 +49,15 @@ export class MovementService {
     try {
       const { accountId_Income, accountId_Outcome, reason, amount } = payload;
 
-      const toUser = await this.accountRepository.findById(accountId_Income);
-      const fromUser = await this.accountRepository.findById(accountId_Outcome);
+      const toUser = await this.accountRepository.findByAccountId_Income(accountId_Income);
+      const fromUser = await this.accountRepository.findByAccountId_Outcome(accountId_Outcome);
 
       if( !toUser ) {
-        throw new NotFoundException('Account ID INCOME not found to user, please call to bank.');
+        return new ResponseEntity(404, 'Cuenta no encontrada.', 'La cuenta de ahorros a la que le vas a transferir no se encuentra registrada en nuestro sistema.');
       }
       
       if( !fromUser ) {
-        throw new NotFoundException('Account ID OUTCOME not found from user, please call to bank.');
+        return new ResponseEntity(404, 'Cuenta no encontrada.', 'La cuenta de ahorros de la que vas a transferir no se encuentra registrada en nuestro sistema.');
       }
 
       const amountParsed = parseInt(amount)
@@ -70,10 +71,11 @@ export class MovementService {
       }
 
       if( amount > fromUser.balance ) {
-        return {
-          message: 'El monto que estás transfiriendo sobrepasa tus fondos.',
-          code: HttpStatus.SERVICE_UNAVAILABLE
-        };
+        // return {
+        //   message: 'El monto que estás transfiriendo sobrepasa tus fondos.',
+        //   code: HttpStatus.SERVICE_UNAVAILABLE
+        // };
+        return new ResponseEntity(400, 'Saldo insuficiente.', 'El monto que estás transfiriendo excede tus fondos.');
       }
 
       const movement = await this.movementRepository.create(payloadSave);
@@ -86,7 +88,7 @@ export class MovementService {
 
       return {movement, savedBalanceIncome, savedBalanceOutcome};
     } catch (error) {
-      throw new BadRequestException(error, 'Please sure of send a good money transfer.')
+      return new ResponseEntity(404, 'Cuenta no encontrada.', 'El ID de la cuenta no se encuentra registrada.');
     }
   }
 

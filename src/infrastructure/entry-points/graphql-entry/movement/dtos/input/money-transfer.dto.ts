@@ -7,10 +7,12 @@ export class MoneyTransferDto {
 
     @Field( () => ID )
     @IsNotEmpty()
+    @IsString()
     accountId_Income: Schema.Types.ObjectId;
 
     @Field( () => ID )
     @IsNotEmpty()
+    @IsString()
     accountId_Outcome: Schema.Types.ObjectId;
     
     @Field( () => String )

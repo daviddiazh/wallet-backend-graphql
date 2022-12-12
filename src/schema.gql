@@ -29,6 +29,16 @@ type AccountGQLFBUI {
   updatedAt: DateTime!
 }
 
+type MovementsList {
+  _id: ID!
+  accountId_Income: ID!
+  accountId_Outcome: ID!
+  reason: String!
+  amount: String!
+  fees: Float!
+  createdAt: DateTime!
+}
+
 type Movement {
   _id: ID!
   accountId_Income: ID!
@@ -38,27 +48,6 @@ type Movement {
   fees: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-type RequestCredit {
-  movement: Movement!
-  updateBalance: AccountGQL!
-}
-
-type MoneyTransfer {
-  movement: Movement!
-  savedBalanceIncome: AccountGQL!
-  savedBalanceOutcome: AccountGQL!
-}
-
-type MovementsList {
-  _id: ID!
-  accountId_Income: ID!
-  accountId_Outcome: ID!
-  reason: String!
-  amount: String!
-  fees: Float!
-  createdAt: DateTime!
 }
 
 type User {
@@ -72,14 +61,24 @@ type User {
 }
 
 type Query {
-  findById(id: ID!): AccountGQL!
-  findByUserId(id: ID!): AccountGQLFBUI!
+  findById(id: ID!): AccountGQLUnion!
+  findByUserId(id: ID!): AccountGQLFBUIUnion!
   findByUserEmail(email: String!): AccountGQLFBUI!
   myMovementsByAccountId(id: String!): [MovementsList!]!
   findUserById(id: String!): User!
   findUserByEmail(email: String!): User!
   checkToken(token: String!): AuthUnion!
 }
+
+union AccountGQLUnion = AccountGQL | StatusError
+
+type StatusError {
+  code: Int!
+  title: String!
+  description: String!
+}
+
+union AccountGQLFBUIUnion = AccountGQLFBUI | StatusError
 
 union AuthUnion = SignUpOrLogin | StatusError
 
@@ -88,16 +87,10 @@ type SignUpOrLogin {
   token: String!
 }
 
-type StatusError {
-  code: Int!
-  title: String!
-  description: String!
-}
-
 type Mutation {
   updateBalance(updateBalance: UpdateBalanceDto!): AccountGQL!
-  requestCredit(requestCredit: RequestCreditDto!): RequestCredit!
-  moneyTransfer(moneyTransfer: MoneyTransferDto!): MoneyTransfer!
+  requestCredit(requestCredit: RequestCreditDto!): RequestCreditUnion!
+  moneyTransfer(moneyTransfer: MoneyTransferDto!): MoneyTransferUnion!
   signUp(signUp: SignUpDto!): AuthUnion!
   login(login: LoginDtoGQL!): AuthUnion!
 }
@@ -107,10 +100,25 @@ input UpdateBalanceDto {
   newBalance: Int!
 }
 
+union RequestCreditUnion = RequestCredit | StatusError
+
+type RequestCredit {
+  movement: Movement!
+  updateBalance: AccountGQL!
+}
+
 input RequestCreditDto {
   accountId_Income: ID!
   amount: Int!
   reason: String!
+}
+
+union MoneyTransferUnion = MoneyTransfer | StatusError
+
+type MoneyTransfer {
+  movement: Movement!
+  savedBalanceIncome: AccountGQL!
+  savedBalanceOutcome: AccountGQL!
 }
 
 input MoneyTransferDto {

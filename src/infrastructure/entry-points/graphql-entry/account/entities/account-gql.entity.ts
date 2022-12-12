@@ -33,7 +33,7 @@ export class AccountGQL implements IAccount {
 
 
 @ObjectType()
-export class AccountGQLFBUI { //TODOL: Refactor this class
+export class AccountGQLFBUI {
 
     @Field( () => ID )
     _id?: Schema.Types.ObjectId;

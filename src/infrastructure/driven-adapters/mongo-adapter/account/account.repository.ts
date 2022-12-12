@@ -5,6 +5,7 @@ import { AccountSpec } from './account.schema';
 import { IAccountDBRepository } from '../../../entry-points/account/account.repository.types';
 import { AccountDto } from "src/domain/common/account/account.dto";
 import { Account } from "src/infrastructure/entry-points/account/entities/account.entity";
+import { ResponseEntity } from '../../../../domain/common/response-entity';
 
 
 export class AccountDBRepository implements IAccountDBRepository {
@@ -18,13 +19,13 @@ export class AccountDBRepository implements IAccountDBRepository {
      * @param payload
      * @return createdAccount
     */
-    async create (payload: AccountDto): Promise<Account> {
+    async create (payload: AccountDto): Promise<any> {
         try {
             const createdAccount = await this.accountModel.create(payload);
 
             return createdAccount;
         } catch (error) {
-            this.handleExceptions(error);
+            return new ResponseEntity(400, 'Erro al crear la cuenta.', 'Ocurrio un error al crear la cuenta, por favor comuniquese con el Banco.');
         }
     }
 
@@ -33,13 +34,56 @@ export class AccountDBRepository implements IAccountDBRepository {
      * @param payload
      * @return found account
     */
-    async findById (id: string): Promise<Account> {
+    async findById (id: string): Promise<any> {
         try {
             const foundAccount = await this.accountModel.findById(id);
+            
+            if( !foundAccount ) {
+                return new ResponseEntity(400, 'Cuenta no encontrada.', 'El ID de la cuenta no se encuentra registrada.');
+            }
 
             return foundAccount;
         } catch (error) {
-            this.handleExceptions(error);
+            return new ResponseEntity(404, 'Cuenta no encontrada.', 'El ID de la cuenta no se encuentra registrada.');
+        }
+    }
+
+    /**
+     * Find an account by accountId_Income
+     * @param payload
+     * @return found account
+    */
+     async findByAccountId_Income (_id: string): Promise<any> {
+        try {
+            const foundAccount = await this.accountModel.findOne({_id});
+            console.log('foundAccount - INCOME: ', {foundAccount})
+            if( !foundAccount ) {
+                return new ResponseEntity(400, 'Cuenta no encontrada.', 'El ID de la cuenta no se encuentra registrada.');
+            }
+
+            return foundAccount;
+        } catch (error) {
+            return new ResponseEntity(404, 'Cuenta no encontrada.', 'El ID de la cuenta no se encuentra registrada.');
+        }
+    }
+
+    /**
+     * Find an account by accountId_Outcome
+     * @param payload
+     * @return found account
+    */
+     async findByAccountId_Outcome (id: string): Promise<any> {
+        try {
+            const foundAccount = await this.accountModel.findById(id);
+            
+            if( !foundAccount ) {
+                return new ResponseEntity(404, 'Cuenta no encontrada.', 'El ID de la cuenta no se encuentra registrada.');
+            }
+
+            return foundAccount;
+        } catch (error) {
+            // this.handleExceptions(error);
+            return new ResponseEntity(400, 'Cuenta no encontrada.', 'El ID de la cuenta no se encuentra registrada.');
         }
     }
 
@@ -52,7 +96,7 @@ export class AccountDBRepository implements IAccountDBRepository {
         try {
             const foundAccount: any = await this.accountModel.findOne({userId: id});
 
-            if( !foundAccount ) return;
+            if( !foundAccount ) return new ResponseEntity(400, 'Usuario no encontrado.', 'El ID del usuario no se encuentra registrado.');
 
             const { balance: saldo, _id, userId, createdAt, updatedAt } = foundAccount
 
@@ -64,9 +108,9 @@ export class AccountDBRepository implements IAccountDBRepository {
                 userId, 
                 createdAt,
                 updatedAt
-            };
+            }
         } catch (error) {
-            this.handleExceptions(error);
+            return new ResponseEntity(404, 'Cuenta no encontrada.', 'El ID del usuario no se encuentra registrado en nuestro sistema.');
         }
     }
 
@@ -92,7 +136,7 @@ export class AccountDBRepository implements IAccountDBRepository {
                 createdAt
             };
         } catch (error) {
-            this.handleExceptions(error);
+            return new ResponseEntity(404, 'Cuenta no encontrada.', 'El email no se encuentra registrado en nuestro sistema.');
         }
     }
 
@@ -101,23 +145,23 @@ export class AccountDBRepository implements IAccountDBRepository {
      * @param accountId, newBalance
      * @return found account and update balance
     */
-     async updateBalance (accountId: string, newBalance: any): Promise<Account> {
+     async updateBalance (accountId: string, newBalance: any): Promise<any> {
         try {
             const foundAccount = await this.accountModel.findByIdAndUpdate(accountId, {balance: newBalance}, {new: true});
 
             return foundAccount;
         } catch (error) {
-            this.handleExceptions(error);
+            return new ResponseEntity(500, 'Ocurrio un error.', 'Estamos presentando problemas en nuestro sistema actualmente.');
         }
     }
 
 
-    private handleExceptions( error: any ) {
-        if ( error.code === 11000 ) {
-          throw new BadRequestException(`Account exists in db ${ JSON.stringify( error.keyValue ) }`);
-        }
-        console.log(error);
-        throw new InternalServerErrorException(`Can't create Account - Check server logs`);
-      }
+    // private handleExceptions( error: any ) {
+    //     if ( error.code === 11000 ) {
+    //       throw new BadRequestException(`Account exists in db ${ JSON.stringify( error.keyValue ) }`);
+    //     }
+    //     console.log(error);
+    //     throw new InternalServerErrorException(`Can't create Account - Check server logs`);
+    // }
     
 }

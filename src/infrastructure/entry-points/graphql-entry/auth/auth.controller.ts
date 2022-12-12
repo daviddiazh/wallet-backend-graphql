@@ -38,13 +38,10 @@ export class AuthControllerTEST {
     }) )
     uploadProfilePicture(
         @UploadedFile() picture: Express.Multer.File,
-        // @Res() res,
     ) {
-        // const path = join( __dirname, './../../../../../static/uploads', picture.filename );
 
         const secureUrl = `http://localhost:8080/authtest/getImage/${ picture.filename }`
 
-        // res.sendFile( path );
         return { secureUrl };
     }
 

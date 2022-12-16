@@ -1,7 +1,19 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport'
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthService } from './auth.service';
 import { signUpDto } from './dto/auth-dto';
+import { diskStorage } from 'multer';
+import { v4 as uuid } from 'uuid';
+
+const fileNamer = ( req: Express.Request, file: Express.Multer.File, callback: Function ) => {
+
+  const fileExtension = file.mimetype.split('/')[1];
+
+  const fileName = `${ uuid() }.${ fileExtension }`
+
+  callback( null, fileName );
+}
 
 @Controller('/auth')
 export class AuthController {
@@ -10,7 +22,7 @@ export class AuthController {
   ) {}
 
   @Post('/signUp')
-  signUp (@Body() payload: signUpDto) {
+  signUp (@Body() payload: signUpDto ) {
     return this.authService.signUp(payload);
   }
 

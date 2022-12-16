@@ -26,4 +26,7 @@ export class User implements IUser {
     @Field( () => Int )
     clientState?: number;
 
+    @Field( () => String )
+    profilePicture?: string;
+
 }

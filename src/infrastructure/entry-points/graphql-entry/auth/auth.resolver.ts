@@ -1,10 +1,14 @@
+import { UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from "multer";
 import { AuthService } from '../../auth/auth.service';
 import { UserService } from '../../auth/user.service';
 import { User } from './entity/user.entity';
 import { SignUpDto } from './dtos/input/sign-up.dto';
 import { LoginDtoGQL } from './dtos/input/login.dto';
 import { AuthUnion } from '../common/unions/auth';
+
 
 @Resolver()
 export class AuthResolver {
@@ -25,7 +29,7 @@ export class AuthResolver {
     }
 
     @Mutation( () => AuthUnion, { name: 'signUp' } )
-    signUp(@Args('signUp') signUp: SignUpDto) {
+    signUp(@Args('signUp') signUp: SignUpDto ) {
         return this.authService.signUp( signUp );
     }
 

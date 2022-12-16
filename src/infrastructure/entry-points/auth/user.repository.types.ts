@@ -8,6 +8,6 @@ export abstract class IUserDBRepository {
     abstract findByPhone(phone: number): Promise<User>;
     abstract findByEmail(email: string): Promise<any>;
     abstract findAll(): Promise<User[]>;
-    abstract updateRole(id: string, role: string): Promise<User>;
+    abstract updatePicture(id: string, picture: Express.Multer.File | string): Promise<any>;
     abstract delete(id: string): Promise<void>;
 }

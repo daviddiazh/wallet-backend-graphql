@@ -8,4 +8,5 @@ export class User implements IUser{
     email: string;
     password?: string;
     clientState?: number;
+    profilePicture?: string;
 }

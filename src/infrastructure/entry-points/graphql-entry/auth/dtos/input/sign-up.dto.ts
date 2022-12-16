@@ -1,3 +1,4 @@
+import { UploadedFile } from "@nestjs/common";
 import { Field, InputType, Int } from "@nestjs/graphql";
 import { IsEmpty, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
@@ -31,7 +32,6 @@ export class SignUpDto {
 
     @Field( () => String, { nullable: true } )
     @IsOptional()
-    @IsString()
     profilePicture?: string;
 
 }

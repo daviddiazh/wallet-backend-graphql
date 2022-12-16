@@ -1,10 +1,9 @@
-import { Injectable, InternalServerErrorException, HttpStatus, BadRequestException, HttpException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, HttpStatus, BadRequestException, HttpException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserDBRepository } from '../../driven-adapters/mongo-adapter/user/user.repository';
 import { LoginDto, signUpDto } from './dto/auth-dto';
 import { HashService } from '../../driven-adapters/hash-password-adapter/hash-password.service';
 import { AccountService } from '../account/account.service';
-import { GraphQLError } from 'graphql';
 import { ResponseEntity } from '../../../domain/common/response-entity';
 
 @Injectable()
@@ -17,7 +16,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ){}
 
-    async signUp (payload: signUpDto): Promise<object | any> { //TODO: Change method name
+    async signUp ( payload: signUpDto ): Promise<object | any> { 
         try {
             const { password, ...userData } = payload;
             
@@ -25,7 +24,7 @@ export class AuthService {
 
             const user = this.auth.create({
                 ...userData,
-                password: passwordEncrypted
+                password: passwordEncrypted, 
             });
 
             await this.accountService.create({userId: (await user)._id, userEmail: (await user).email})
@@ -126,7 +125,6 @@ export class AuthService {
             //         throw new HttpException('Estamos presentando fallas en nuestro servicio.', HttpStatus.INTERNAL_SERVER_ERROR);
             // }
         } //TODO: Validar porque me devuelve code 200 en vez del 401
-
     }
   
 }

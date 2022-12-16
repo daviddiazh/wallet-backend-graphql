@@ -31,8 +31,14 @@ export class UserService implements IUserDBRepository {
         return this.user.findAll();
     }
 
-    updateRole(id: string, role: string): Promise<User> {
-        return this.updateRole(id, role);
+    async updatePicture ( id: string, picture: string ) {
+        const secureUrl = `http://localhost:8080/picture/getImage/${ picture }`
+        const user = await this.user.updatePicture( id, secureUrl );
+
+        return {
+            user,
+            secureUrl
+        };        
     }
 
     delete(id: string): Promise<void> {

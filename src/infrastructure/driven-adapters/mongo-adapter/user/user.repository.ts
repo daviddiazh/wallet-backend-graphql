@@ -154,26 +154,21 @@ export class UserDBRepository implements IUserDBRepository {
    }
 
    /**
-     * Update a User's role
+     * Update a User's picture
      * @params id, role
-     * @return user's role update - The user's role update
+     * @return user's picture update - The user's picture update
     */
-    async updateRole (id: string, role: string): Promise<User> {
+    async updatePicture (id: string, picture: string): Promise<User> {
         try {
-            const user = await this.userModel.findOneAndUpdate({id, role});
+            const user = await this.userModel.findOneAndUpdate({id, profilePicture: picture});
 
             if ( !user ) {
-                throw new NotFoundException('Not found user - Repository (USER MODULE)');
+                //TODO: make error
             }
-
-            let newObjectUser = user;
-            newObjectUser = newObjectUser.toObject();
-            delete newObjectUser.password;
 
             return user;
         } catch (error) {
-            console.log('Down Service in UPDATEROLE method on Repository - ADAPTER');
-            throw new ServiceUnavailableException(`Down Service in updateRole method: ${error.message}`);
+            //TODO: make error
         }
    }
 

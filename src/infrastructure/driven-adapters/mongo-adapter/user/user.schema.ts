@@ -56,6 +56,7 @@ export class UserSpec extends Document implements IUser {
         type: String,
         trim: true,
         required: false,
+        default: 'https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png'
    })
    profilePicture?: string;
 

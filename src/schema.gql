@@ -58,6 +58,7 @@ type User {
   email: String!
   password: String
   clientState: Int!
+  profilePicture: String!
 }
 
 type Query {

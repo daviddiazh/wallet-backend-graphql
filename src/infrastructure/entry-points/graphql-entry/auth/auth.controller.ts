@@ -16,7 +16,7 @@ const fileNamer = ( req: Express.Request, file: Express.Multer.File, callback: F
 }
 
 
-@Controller('authtest')
+@Controller('picture')
 export class AuthControllerTEST {
 
     @Get('/getImage/:profilePicture')
@@ -39,8 +39,8 @@ export class AuthControllerTEST {
     uploadProfilePicture(
         @UploadedFile() picture: Express.Multer.File,
     ) {
-
-        const secureUrl = `http://localhost:8080/authtest/getImage/${ picture.filename }`
+        
+        const secureUrl = `http://localhost:8080/picture/getImage/${ picture.filename }`
 
         return { secureUrl };
     }

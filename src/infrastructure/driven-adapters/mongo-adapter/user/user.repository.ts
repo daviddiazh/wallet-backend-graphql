@@ -153,14 +153,15 @@ export class UserDBRepository implements IUserDBRepository {
         }
    }
 
-   /**
+    /**
      * Update a User's picture
      * @params id, role
      * @return user's picture update - The user's picture update
     */
     async updatePicture (id: string, picture: string): Promise<User> {
         try {
-            const user = await this.userModel.findOneAndUpdate({id, profilePicture: picture});
+            // const user = await this.userModel.findOneAndUpdate({id, profilePicture: picture});
+            const user = await this.userModel.findByIdAndUpdate({_id: id}, {profilePicture: picture});
 
             if ( !user ) {
                 //TODO: make error
@@ -170,7 +171,7 @@ export class UserDBRepository implements IUserDBRepository {
         } catch (error) {
             //TODO: make error
         }
-   }
+    }
 
     /**
      * Delete a User

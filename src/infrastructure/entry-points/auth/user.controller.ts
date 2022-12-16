@@ -60,7 +60,6 @@ export class UserController implements IUserDBRepository {
     })
   }) )
   async updatePicture (@Param('userId') id: string, @UploadedFile() picture: Express.Multer.File, ) {
-
     return this.userService.updatePicture(id, picture.filename);
   }
 

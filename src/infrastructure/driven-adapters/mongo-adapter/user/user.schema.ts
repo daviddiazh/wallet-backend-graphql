@@ -56,6 +56,7 @@ export class UserSpec extends Document implements IUser {
         type: String,
         trim: true,
         required: false,
+        default: ''
    })
    profilePicture?: string;
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { IUserDBRepository } from './user.repository.types';
 import { CreateUserDto } from './dto/user.dto';
@@ -6,12 +6,9 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid'; 
-import fs from 'fs';
-import path from 'path';
+import { join } from 'path';
 
 const fileNamer = async ( req: any, file: Express.Multer.File, callback: Function ) => {
-  // const userId = req.params.userId
-
   const fileExtension = file.mimetype.split('/')[1];
 
   const fileName = `${ uuid() }.${ fileExtension }`
@@ -66,6 +63,16 @@ export class UserController implements IUserDBRepository {
 
     return this.userService.updatePicture(id, picture.filename);
   }
+
+  @Get('picture/getImage/:profilePicture')
+    getImage(
+        @Res() res,
+        @Param('profilePicture') profilePicture: string,
+    ) {
+      const path = join( __dirname, '../../../../static/uploads', profilePicture );
+
+      res.sendFile( path );
+    }
 
   @UseGuards( JwtAuthGuard )
   @Delete('/delete/:id')

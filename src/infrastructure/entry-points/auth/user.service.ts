@@ -32,13 +32,13 @@ export class UserService implements IUserDBRepository {
     }
 
     async updatePicture ( id: string, picture: string ) {
-        const secureUrl = `http://localhost:8080/picture/getImage/${ picture }`
+        const secureUrl = `http://localhost:8080/user/picture/getImage/${ picture }`
         const user = await this.user.updatePicture( id, secureUrl );
 
         return {
-            user,
+            id: user._id,
             secureUrl
-        };        
+        };
     }
 
     delete(id: string): Promise<void> {

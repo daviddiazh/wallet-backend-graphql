@@ -1,10 +1,8 @@
 import { InjectModel } from "@nestjs/mongoose";
-import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { Model } from "mongoose";
 import { AccountSpec } from './account.schema';
 import { IAccountDBRepository } from '../../../entry-points/account/account.repository.types';
 import { AccountDto } from "src/domain/common/account/account.dto";
-import { Account } from "src/infrastructure/entry-points/account/entities/account.entity";
 import { ResponseEntity } from '../../../../domain/common/response-entity';
 
 
@@ -56,7 +54,7 @@ export class AccountDBRepository implements IAccountDBRepository {
      async findByAccountId_Income (_id: string): Promise<any> {
         try {
             const foundAccount = await this.accountModel.findOne({_id});
-            console.log('foundAccount - INCOME: ', {foundAccount})
+            
             if( !foundAccount ) {
                 return new ResponseEntity(400, 'Cuenta no encontrada.', 'El ID de la cuenta no se encuentra registrada.');
             }
@@ -154,14 +152,5 @@ export class AccountDBRepository implements IAccountDBRepository {
             return new ResponseEntity(500, 'Ocurrio un error.', 'Estamos presentando problemas en nuestro sistema actualmente.');
         }
     }
-
-
-    // private handleExceptions( error: any ) {
-    //     if ( error.code === 11000 ) {
-    //       throw new BadRequestException(`Account exists in db ${ JSON.stringify( error.keyValue ) }`);
-    //     }
-    //     console.log(error);
-    //     throw new InternalServerErrorException(`Can't create Account - Check server logs`);
-    // }
     
 }
